@@ -1,6 +1,3 @@
-// Mô phỏng liên kết ion Mg-Cl 3D
- // Tác giả: GPT-5
-
  let fontRegular;
  let playButton, resetButton, instructionsButton, sphereLayerButton, labelButton, rotationButton;
  let titleDiv, footerDiv, instructionsPopup;
@@ -502,7 +499,8 @@
      }
    }
 
-   if (showSphereLayer && (state === "attracting" || state === "done")) {
+   // Sửa: Ống hình trụ mờ chỉ xuất hiện khi đã bật lớp cầu (showSphereLayer).
+   if (showSphereLayer) {
      drawAttractionTube(atoms[0], atoms[1]);
      drawAttractionTube(atoms[2], atoms[1]);
    }
@@ -588,13 +586,16 @@
    rotateZ(angleZ + HALF_PI);
    
    let tubeRadius = 35; // Tăng đường kính
-   let alpha = map(sin(frameCount * 1), -1, 1, 20, 50); // Giảm độ trong suốt để mờ hơn nữa
+   // Điều chỉnh tốc độ nhấp nháy xuống chậm hơn
+   let speed = 1.2; // giảm từ 4.0 xuống 1.5 để nhấp nháy chậm hơn
+   let phase = posMid.x > 0 ? PI / 2 : 0; // lệch pha nhỏ giữa hai ống
+   let alpha = map(sin(frameCount * speed + phase), -1, 1, 40, 100);
    let tubeColor = color(255, 255, 255, alpha);
 
-   drawingContext.filter = 'blur(15px)'; // Tăng độ mờ
+   drawingContext.filter = 'blur(20px)'; // Tăng độ mờ
    fill(tubeColor);
    noStroke();
-   cylinder(tubeRadius, tubeLength, 24, 1);
+   cylinder(tubeRadius, tubeLength, 30, 1);
    drawingContext.filter = 'none';
    pop();
  }
